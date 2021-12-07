@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\netbox",
+    "\\netbox\\dcim",
+    "\\netbox\\dcim\\api",
+    "\\netbox\\dcim\\models",
+    "\\netbox\\templates\\dcim"
+  ],
+  "SelectedNode": "\\netbox\\dcim\\models\\cables.py",
+  "PreviewInSolutionExplorer": false
+}

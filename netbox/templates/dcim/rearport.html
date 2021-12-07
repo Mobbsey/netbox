@@ -30,10 +30,22 @@
                             <td>{{ object.get_type_display }}</td>
                         </tr>
                         <tr>
-                          <th scope="row">Color</th>
-                          <td>
-                            <span class="badge color-label" style="background-color: #{{ object.color }}">&nbsp;</span>
-                          </td>
+                            <th scope="row">Structured Cable Length</th>
+                            <td>{{object.cable_length}} {{object.cable_length_unit}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Structured Cable Type</th>
+                            <td>{{object.get_cable_type_display}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Outlet Location</th>
+                            <td>{{ object.cable_outlet_id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Color</th>
+                            <td>
+                                <span class="badge color-label" style="background-color: #{{ object.color }}">&nbsp;</span>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Positions</th>

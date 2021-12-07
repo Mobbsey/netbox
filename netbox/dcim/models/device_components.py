@@ -844,6 +844,35 @@ class RearPort(ComponentModel, LinkTermination):
             MaxValueValidator(REARPORT_POSITIONS_MAX)
         ]
     )
+
+    # Custom Data Socket Outlet Fields
+    cable_length = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
+    cable_length_unit = models.CharField(
+        max_length=50,
+        choices=CableLengthUnitChoices,
+        blank=True,
+    )
+    cable_type = models.CharField(
+        max_length=50,
+        choices=CableTypeChoices,
+        blank=True
+    )
+    cable_designator = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    cable_outlet_id = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
     clone_fields = ['device', 'type', 'positions']
 
     class Meta:

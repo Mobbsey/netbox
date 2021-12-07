@@ -513,6 +513,20 @@ class CablePath(BigIDModel):
 
         return cable_ids
 
+    def get_rearport_ids(self):
+        """
+        Return all Rear Port IDs within the path.
+        """
+        rearport_ct = ContentType.objects.get_for_model(RearPort).pk
+        rearport_ids = []
+
+        for node in self.path:
+            ct, id = decompile_path_node(node)
+            if ct == rearport_ct:
+                rearport_ids.append(id)
+
+        return rearport_ids
+
     def get_total_length(self):
         """
         Return a tuple containing the sum of the length of each cable in the path
@@ -521,6 +535,11 @@ class CablePath(BigIDModel):
         cable_ids = self.get_cable_ids()
         cables = Cable.objects.filter(id__in=cable_ids, _abs_length__isnull=False)
         total_length = cables.aggregate(total=Sum('_abs_length'))['total']
+
+        rearport_ids = self.get_rearport_ids()
+        rearports = RearPort.objects.filter(id__in=rearport_ids, cable_length__isnull=False)
+        total_length = int(total_length or 0) + int(rearports.aggregate(total=Sum('cable_length'))['total'] or 0)
+        
         is_definitive = len(cables) == len(cable_ids)
 
         return total_length, is_definitive

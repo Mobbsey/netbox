@@ -1220,7 +1220,8 @@ class RearPortForm(CustomFieldModelForm):
     class Meta:
         model = RearPort
         fields = [
-            'device', 'name', 'label', 'type', 'color', 'positions', 'mark_connected', 'description', 'tags',
+            'device', 'name', 'label', 'type', 'color', 'positions', 'mark_connected', 'description', 'tags', 'positions', 'mark_connected', 'description', 'tags',
+            'cable_length', 'cable_length_unit', 'cable_type', 'cable_designator', 'cable_outlet_id', 
         ]
         widgets = {
             'device': forms.HiddenInput(),

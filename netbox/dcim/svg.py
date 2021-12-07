@@ -489,6 +489,37 @@ class CableTraceSVG:
                 )
                 terminations.append(termination)
 
+                # Custom Data Outlet Handling
+                if near_end._meta.model_name == 'rearport':
+                    cable_labels = [
+                        f'Structured Cable {near_end.cable_designator}',
+                        f'{near_end.get_cable_type_display()}'
+                    ]
+                    if near_end.cable_length and near_end.cable_length_unit:
+                        cable_labels.append(f'{near_end.cable_length} {near_end.get_cable_length_unit_display()}')
+                    
+                    cable = self._draw_cable(
+                        color='FF0000',
+                        url=near_end.parent_object.get_absolute_url(),
+                        labels=cable_labels
+                    )
+                    connectors.append(cable)   
+                
+                    termination_labels = [
+                        'Data Outlet',
+                        f'{near_end.cable_outlet_id}', 
+                        f'{near_end.get_cable_type_display()}'
+                    ]
+                    termination = self._draw_box(
+                        width=self.width * .6,
+                        color='9e9e9e',
+                        url=near_end.parent_object.get_absolute_url(),
+                        labels=termination_labels,
+                        y_indent=PADDING,
+                        radius=5
+                    )
+                    terminations.append(termination)
+
             # Connector (a Cable or WirelessLink)
             if connector is not None:
 
@@ -508,6 +539,37 @@ class CableTraceSVG:
                         labels=connector_labels
                     )
                     connectors.append(cable)
+
+                    # Custom Data Outlet Handling
+                    if far_end._meta.model_name == 'rearport':
+                        termination_labels = [
+                            'Data Outlet',
+                            f'{far_end.cable_outlet_id}', 
+                            f'{far_end.get_cable_type_display()}'
+                        ]
+                        termination = self._draw_box(
+                            width=self.width * .6,
+                            color='9e9e9e',
+                            url=far_end.parent_object.get_absolute_url(),
+                            labels=termination_labels,
+                            y_indent=PADDING,
+                            radius=5
+                        )
+                        terminations.append(termination)
+
+                        cable_labels = [
+                            f'Structured Cable {far_end.cable_designator}',
+                            f'{far_end.get_cable_type_display()}'
+                        ]
+                        if far_end.cable_length and far_end.cable_length_unit:
+                            cable_labels.append(f'{far_end.cable_length} {far_end.get_cable_length_unit_display()}')
+                        
+                        cable = self._draw_cable(
+                            color='FF0000',
+                            url=far_end.parent_object.get_absolute_url(),
+                            labels=cable_labels
+                        )
+                        connectors.append(cable)   
 
                 # WirelessLink
                 elif type(connector) is WirelessLink:
