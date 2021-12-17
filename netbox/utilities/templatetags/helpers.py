@@ -32,7 +32,7 @@ def placeholder(value):
     """
     Render a muted placeholder if value equates to False.
     """
-    if value:
+    if value not in ('', None):
         return value
     placeholder = '<span class="text-muted">&mdash;</span>'
     return mark_safe(placeholder)
@@ -233,7 +233,7 @@ def fgcolor(value):
     value = value.lower().strip('#')
     if not re.match('^[0-9a-f]{6}$', value):
         return ''
-    return '#{}'.format(foreground_color(value))
+    return f'#{foreground_color(value)}'
 
 
 @register.filter()

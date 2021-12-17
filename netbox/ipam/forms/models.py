@@ -575,9 +575,9 @@ class FHRPGroupForm(CustomFieldModelForm):
                 vrf=self.cleaned_data['ip_vrf'],
                 address=self.cleaned_data['ip_address'],
                 status=self.cleaned_data['ip_status'],
+                role=FHRP_PROTOCOL_ROLE_MAPPINGS[self.cleaned_data['protocol']],
                 assigned_object=instance
             )
-            ipaddress.role = FHRP_PROTOCOL_ROLE_MAPPINGS[self.cleaned_data['protocol']]
             ipaddress.save()
 
             # Check that the new IPAddress conforms with any assigned object-level permissions
@@ -587,13 +587,20 @@ class FHRPGroupForm(CustomFieldModelForm):
         return instance
 
     def clean(self):
+        ip_vrf = self.cleaned_data.get('ip_vrf')
         ip_address = self.cleaned_data.get('ip_address')
         ip_status = self.cleaned_data.get('ip_status')
 
-        if ip_address and not ip_status:
-            raise forms.ValidationError({
-                'ip_status': "Status must be set when creating a new IP address."
+        if ip_address:
+            ip_form = IPAddressForm({
+                'address': ip_address,
+                'vrf': ip_vrf,
+                'status': ip_status,
             })
+            if not ip_form.is_valid():
+                self.errors.update({
+                    f'ip_{field}': error for field, error in ip_form.errors.items()
+                })
 
 
 class FHRPGroupAssignmentForm(BootstrapMixin, forms.ModelForm):
@@ -802,12 +809,29 @@ class VLANForm(TenancyForm, CustomFieldModelForm):
 
 
 class ServiceForm(CustomFieldModelForm):
+    device = DynamicModelChoiceField(
+        queryset=Device.objects.all(),
+        required=False
+    )
+    virtual_machine = DynamicModelChoiceField(
+        queryset=VirtualMachine.objects.all(),
+        required=False
+    )
     ports = NumericArrayField(
         base_field=forms.IntegerField(
             min_value=SERVICE_PORT_MIN,
             max_value=SERVICE_PORT_MAX
         ),
         help_text="Comma-separated list of one or more port numbers. A range may be specified using a hyphen."
+    )
+    ipaddresses = DynamicModelMultipleChoiceField(
+        queryset=IPAddress.objects.all(),
+        required=False,
+        label='IP Addresses',
+        query_params={
+            'device_id': '$device',
+            'virtual_machine_id': '$virtual_machine',
+        }
     )
     tags = DynamicModelMultipleChoiceField(
         queryset=Tag.objects.all(),
@@ -817,7 +841,7 @@ class ServiceForm(CustomFieldModelForm):
     class Meta:
         model = Service
         fields = [
-            'name', 'protocol', 'ports', 'ipaddresses', 'description', 'tags',
+            'device', 'virtual_machine', 'name', 'protocol', 'ports', 'ipaddresses', 'description', 'tags',
         ]
         help_texts = {
             'ipaddresses': "IP address assignment is optional. If no IPs are selected, the service is assumed to be "
@@ -827,18 +851,3 @@ class ServiceForm(CustomFieldModelForm):
             'protocol': StaticSelect(),
             'ipaddresses': StaticSelectMultiple(),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Limit IP address choices to those assigned to interfaces of the parent device/VM
-        if self.instance.device:
-            self.fields['ipaddresses'].queryset = IPAddress.objects.filter(
-                interface__in=self.instance.device.vc_interfaces().values_list('id', flat=True)
-            )
-        elif self.instance.virtual_machine:
-            self.fields['ipaddresses'].queryset = IPAddress.objects.filter(
-                vminterface__in=self.instance.virtual_machine.interfaces.values_list('id', flat=True)
-            )
-        else:
-            self.fields['ipaddresses'].choices = []

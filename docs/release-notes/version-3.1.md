@@ -1,11 +1,50 @@
 # NetBox v3.1
 
-## v3.1.1 (FUTURE)
+## v3.1.2 (FUTURE)
+
+### Enhancements
+
+* [#7665](https://github.com/netbox-community/netbox/issues/7665) - Add toggle to show only available child prefixes
+* [#8057](https://github.com/netbox-community/netbox/issues/8057) - Dynamic object tables using HTMX
+* [#8080](https://github.com/netbox-community/netbox/issues/8080) - Link to NAT IPs for device/VM primary IPs
+* [#8081](https://github.com/netbox-community/netbox/issues/8081) - Allow creating services directly from navigation menu
 
 ### Bug Fixes
 
+* [#7674](https://github.com/netbox-community/netbox/issues/7674) - Fix inadvertent application of device type context to virtual machines
+* [#8074](https://github.com/netbox-community/netbox/issues/8074) - Ordering VMs by name should reference naturalized value
+* [#8077](https://github.com/netbox-community/netbox/issues/8077) - Fix exception when attaching image to location, circuit, or power panel
+* [#8078](https://github.com/netbox-community/netbox/issues/8078) - Add missing wireless models to `lsmodels()` in `nbshell`
+* [#8079](https://github.com/netbox-community/netbox/issues/8079) - Fix validation of LLDP neighbors when connected device has an asset tag
+* [#8088](https://github.com/netbox-community/netbox/issues/8088) - Improve legibility of text in labels with light-colored backgrounds
+
+---
+
+## v3.1.1 (2021-12-13)
+
+### Enhancements
+
+* [#8047](https://github.com/netbox-community/netbox/issues/8047) - Display sorting indicator in table column headers
+
+### Bug Fixes
+
+* [#5869](https://github.com/netbox-community/netbox/issues/5869) - Fix permissions evaluation under available prefix/IP REST API endpoints
+* [#7519](https://github.com/netbox-community/netbox/issues/7519) - Return a 409 status for unfulfillable available prefix/IP requests
+* [#7690](https://github.com/netbox-community/netbox/issues/7690) - Fix custom field integer support for MultiValueNumberFilter
 * [#7990](https://github.com/netbox-community/netbox/issues/7990) - Fix `title` display on contact detail view
 * [#7996](https://github.com/netbox-community/netbox/issues/7996) - Show WWN field in interface creation form
+* [#8001](https://github.com/netbox-community/netbox/issues/8001) - Correct verbose name for wireless LAN group model
+* [#8003](https://github.com/netbox-community/netbox/issues/8003) - Fix cable tracing across bridged interfaces with no cable
+* [#8005](https://github.com/netbox-community/netbox/issues/8005) - Fix contact email display
+* [#8009](https://github.com/netbox-community/netbox/issues/8009) - Validate IP addresses for uniqueness when creating an FHRP group
+* [#8010](https://github.com/netbox-community/netbox/issues/8010) - Allow filtering devices by multiple serial numbers
+* [#8019](https://github.com/netbox-community/netbox/issues/8019) - Exclude metrics endpoint when `LOGIN_REQUIRED` is true
+* [#8030](https://github.com/netbox-community/netbox/issues/8030) - Validate custom field names
+* [#8033](https://github.com/netbox-community/netbox/issues/8033) - Fix display of zero values for custom integer fields in tables
+* [#8035](https://github.com/netbox-community/netbox/issues/8035) - Redirect back to parent prefix after creating IP address(es) where applicable
+* [#8038](https://github.com/netbox-community/netbox/issues/8038) - Placeholder filter should display zero integer values
+* [#8042](https://github.com/netbox-community/netbox/issues/8042) - Fix filtering cables list by site slug or rack name
+* [#8051](https://github.com/netbox-community/netbox/issues/8051) - Contact group parent assignment should not be required under REST API
 
 ---
 
